@@ -1,0 +1,49 @@
+﻿@model Shoe
+@{
+    ViewData["Title"] = "Quản lý";
+        var listColor = ViewBag.Color as IEnumerable<Color>;
+
+}
+<form asp-action="SubmitEdit" asp-controller="Dashboard" method='post'>
+    <input hidden asp-for="@Model.Id" />
+    <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">Tên</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" asp-for="@Model.Name">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">Giá</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" asp-for="@Model.Price">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">Ảnh</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" asp-for="@Model.Image">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Màu</label>
+        <div class=" col-sm-10">
+
+            <select class="form-control" asp-for="@Model.ColorId">
+                @foreach (var item in listColor)
+                {
+                    if(item.Id == Model.ColorId)
+                    {
+                        <option value="@item.Id" selected>@item.Name</option>
+                    }
+                    else
+                    {
+                         <option value="@item.Id">@item.Name</option>
+                    }
+                }
+
+            </select>
+        </div>
+
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+</form>
