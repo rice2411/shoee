@@ -83,3 +83,4 @@ C:\Users\Admin\Desktop\NameShoes\NameShoes\bin\Debug\netcoreapp3.1\runtimes\win\
 C:\Users\Admin\Desktop\NameShoes\NameShoes\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Admin\Desktop\NameShoes\NameShoes\obj\Debug\netcoreapp3.1\Razor\Views\Dashboard\Index.cshtml.g.cs
 C:\Users\Admin\Desktop\NameShoes\NameShoes\obj\Debug\netcoreapp3.1\Razor\Views\Dashboard\Edit.cshtml.g.cs
+C:\Users\Admin\Desktop\NameShoes\NameShoes\obj\Debug\netcoreapp3.1\Razor\Views\Dashboard\Create.cshtml.g.cs

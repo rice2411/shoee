@@ -1,0 +1,80 @@
+﻿@model ShoeRequest
+@{
+    ViewData["Title"] = "Quản lý";
+    var listColor = ViewBag.Color as IEnumerable<Color>;
+
+}
+<form asp-action="Create" asp-controller="Dashboard" method='post' enctype="multipart/form-data">
+
+
+
+    <div class="d-flex justify-content-center">
+        <img src="/images/noneavatar.jpg" style="width:100px; height:100px;" class="avatar img-circle myImage" alt="avatar" id="avatar" asp-append-version="true">
+    </div>
+    <div class="form-group row">
+
+        <label for="inputPassword" class="col-sm-2 col-form-label">Ảnh</label>
+        <div class="col-sm-10">
+            <div class="text-center">
+                <div class="custom-file">
+                    <input class="custom-file-input" asp-for="@Model.formFile">
+                    <label class="custom-file-label avatarPath" for="custom-file" style=" overflow-x: hidden; width: auto;"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="staticEmail" class="col-sm-2 col-form-label">Tên</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" asp-for="@Model.Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">Giá</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" asp-for="@Model.Price">
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Màu</label>
+        <div class=" col-sm-10">
+
+            <select class="form-control" asp-for="@Model.Color">
+                @foreach (var item in listColor)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+
+            </select>
+        </div>
+
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary" data-dismiss="modal">Lưu</button>
+
+</form>
+
+@section Scripts{
+<script>
+    $(document).ready(function () {
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    });
+
+
+    $(document).ready(function () {
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            $("#avatar").attr("src", window.URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+</script>
+}   

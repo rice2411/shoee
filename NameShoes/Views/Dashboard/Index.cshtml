@@ -1,10 +1,12 @@
-﻿@{
+﻿@model ShoeRequest
+
+@{
     ViewData["Title"] = "Quản lý";
     var listShoe = ViewBag.Shoes as IEnumerable<Shoe>;
     var listColor = ViewBag.Color as IEnumerable<Color>;
 
 }
-<button class="btn btn-success mb-2" data-toggle="modal" data-target="#exampleModal">Thêm mới</button>
+<a class="btn btn-success mb-2" asp-action="Create" asp-controller="Dashboard">Thêm mới</a>
 <table class="table text-center">
     <thead class="thead-dark">
         <tr>
@@ -20,7 +22,17 @@
         {
             <tr>
                 <th scope="row">@item.Id</th>
-                <td><img src="@item.Image" style="width: 50px" /></td>
+                <td>
+                    @if (!@item.Image.Contains("https"))
+                    {
+                        string avatar = "/images/" + @item.Image;
+                        <img src="@avatar" style="width: 50px" />
+                    }
+                    else
+                    {
+                             <img src="@item.Image" style="width: 50px" />
+                    }
+                </td>
                 <td>@item.Name</td>
                 <td>@item.Price</td>
                 <td>
@@ -35,7 +47,7 @@
 </table>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form asp-action="Create" asp-controller="Dashboard" method='post'>
+    <form asp-action="Create" asp-controller="Dashboard" method='post' enctype="multipart/form-data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -45,30 +57,41 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <img src="/images/noneavatar.jpg" style="width:100px; height:100px;" class="avatar img-circle myImage" alt="avatar" id="avatar" asp-append-version="true">
+                    </div>
+                    <div class="form-group row">
 
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Ảnh</label>
+                        <div class="col-sm-10">
+                            <div class="text-center">
+                                <div class="custom-file">
+                                    <input class="custom-file-input" asp-for="@Model.formFile">
+                                    <label class="custom-file-label avatarPath" for="custom-file" style=" overflow-x: hidden; width: auto;"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="staticEmail" class="col-sm-2 col-form-label">Tên</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="Name">
+                            <input type="text" class="form-control" asp-for="@Model.Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Giá</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control"  name="Price">
+                            <input type="text" class="form-control" asp-for="@Model.Price">
+                             <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">Ảnh</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control"  name="Image">
-                        </div>
-                    </div>
+
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Màu</label>
                         <div class=" col-sm-10">
 
-                            <select class="form-control" name="Color">
+                            <select class="form-control" asp-for="@Model.Color">
                                 @foreach (var item in listColor)
                                 {
                                     <option value="@item.Id">@item.Name</option>
@@ -88,3 +111,4 @@
         </div>
     </form>
 </div>
+

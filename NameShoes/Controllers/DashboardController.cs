@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using NameShoes.Models;
 using NameShoes.Services;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace NameShoes.Controllers
@@ -46,21 +48,48 @@ namespace NameShoes.Controllers
             ViewBag.Color = colorRepository.GetList();
             return View("~/Views/Dashboard/Index.cshtml");
         }
-        public IActionResult Create(ShoeRequest shoe)
+        [HttpGet]
+        public IActionResult Create()
         {
-            var colors = colorRepository.GetList() as IEnumerable<Color>;
-            var color = colors.Where(c => c.Id == shoe.Color).FirstOrDefault();
-            var model = new Shoe()
-            {
-                Name = shoe.Name,
-                Price = shoe.Price,
-                Color = color,
-                Image = shoe.Image
-            };
-            shoeRepository.Create(model);
-            ViewBag.Shoes = shoeRepository.GetList();
             ViewBag.Color = colorRepository.GetList();
-            return View("~/Views/Dashboard/Index.cshtml");
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(ShoeRequest shoe) 
+        {
+            if (ModelState.IsValid)
+            {
+                var colors = colorRepository.GetList() as IEnumerable<Color>;
+                var color = colors.Where(c => c.Id == shoe.Color).FirstOrDefault();
+                var model = new Shoe()
+                {
+                    Name = shoe.Name,
+                    Price = (int)shoe.Price,
+                    Color = color
+                };
+
+                var fileName = string.Empty;
+                if (shoe.formFile != null)
+                {
+                    string uploadImg = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                    fileName = $"{Guid.NewGuid()}_{shoe.formFile.FileName}";
+                    var filePath = Path.Combine(uploadImg, fileName);
+                    using (var fs = new FileStream(filePath, FileMode.Create))
+                    {
+                        shoe.formFile.CopyTo(fs);
+                    }
+                }
+                model.Image = fileName;
+
+
+
+                shoeRepository.Create(model);
+                ViewBag.Shoes = shoeRepository.GetList();
+                ViewBag.Color = colorRepository.GetList();
+                return View("~/Views/Dashboard/Index.cshtml");
+            }
+            ViewBag.Color = colorRepository.GetList();
+            return View(shoe);
         }
         public IActionResult Index()
         {
